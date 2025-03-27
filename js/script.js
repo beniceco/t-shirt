@@ -1185,6 +1185,108 @@ function initOrderForm() {
             });
         });
         
+        // اختيار المقاس مع تأثيرات متقدمة
+        const sizeButtons = productElement.querySelectorAll('.size-btn');
+        sizeButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // إزالة الفئة النشطة من جميع الأزرار
+                sizeButtons.forEach(sizeBtn => sizeBtn.classList.remove('active'));
+                
+                // إضافة الفئة النشطة للزر المحدد
+                this.classList.add('active');
+                
+                // تأثير حركي على الزر المحدد
+                this.animate([
+                    { transform: 'scale(0.9)' },
+                    { transform: 'scale(1.1)' },
+                    { transform: 'scale(1)' }
+                ], {
+                    duration: 300,
+                    easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+                });
+                
+                // تحديث تفاصيل المنتج
+                const sizeText = productElement.querySelector('.product-preview-size');
+                sizeText.textContent = `المقاس: ${this.dataset.size}`;
+                sizeText.animate([
+                    { opacity: 0, transform: 'translateY(-5px)' },
+                    { opacity: 1, transform: 'translateY(0)' }
+                ], {
+                    duration: 300,
+                    easing: 'ease-out'
+                });
+            });
+        });
+        
+        // أزرار الكمية مع تأثيرات متقدمة
+        const qtyInput = productElement.querySelector('.product-qty');
+        const decreaseBtn = productElement.querySelector('.quantity-btn.decrease');
+        const increaseBtn = productElement.querySelector('.quantity-btn.increase');
+        
+        // زر زيادة الكمية
+        increaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(qtyInput.value);
+            if (currentValue < 10) {
+                qtyInput.value = currentValue + 1;
+                
+                // تأثير حركي على زر الزيادة
+                this.animate([
+                    { transform: 'scale(0.8)' },
+                    { transform: 'scale(1.2)' },
+                    { transform: 'scale(1)' }
+                ], {
+                    duration: 300,
+                    easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+                });
+                
+                // تحديث تفاصيل المنتج
+                const qtyText = productElement.querySelector('.product-preview-qty');
+                qtyText.textContent = `الكمية: ${currentValue + 1}`;
+                qtyText.animate([
+                    { opacity: 0, transform: 'translateY(-5px)' },
+                    { opacity: 1, transform: 'translateY(0)' }
+                ], {
+                    duration: 300,
+                    easing: 'ease-out'
+                });
+                
+                // تحديث إجمالي الطلب
+                updateOrderSummary();
+            }
+        });
+        
+        // زر تقليل الكمية
+        decreaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(qtyInput.value);
+            if (currentValue > 1) {
+                qtyInput.value = currentValue - 1;
+                
+                // تأثير حركي على زر التقليل
+                this.animate([
+                    { transform: 'scale(0.8)' },
+                    { transform: 'scale(1.2)' },
+                    { transform: 'scale(1)' }
+                ], {
+                    duration: 300,
+                    easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+                });
+                
+                // تحديث تفاصيل المنتج
+                const qtyText = productElement.querySelector('.product-preview-qty');
+                qtyText.textContent = `الكمية: ${currentValue - 1}`;
+                qtyText.animate([
+                    { opacity: 0, transform: 'translateY(-5px)' },
+                    { opacity: 1, transform: 'translateY(0)' }
+                ], {
+                    duration: 300,
+                    easing: 'ease-out'
+                });
+                
+                // تحديث إجمالي الطلب
+                updateOrderSummary();
+            }
+        });
+        
         // حذف المنتج مع تأثير حركي
         const removeBtn = productElement.querySelector('.remove-product-btn');
         if (removeBtn) {
