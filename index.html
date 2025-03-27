@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOLY HUX - طقم صيفي فاخر</title>
+    <meta name="description" content="طقم رجالي صيفي من SOLY HUX مصنوع من قماش وافل فاخر للراحة المطلقة. متوفر بثلاثة ألوان أنيقة. تسوق الآن واحصل على خصم خاص!">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- HEADER SECTION -->
+<header class="main-header">
+    <div class="header-container">
+        <div class="logo-container">
+            <div class="brand-logo">
+                <div>
+                    <span class="brand-text-main">SOLY</span>
+                    <span class="brand-text-accent">HUX</span>
+                </div>
+                <span class="brand-tagline">طقم صيفي فاخر</span>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="#hero" class="nav-link">الرئيسية</a></li>
+                <li class="nav-item"><a href="#texture-features" class="nav-link">الميزات</a></li>
+                <li class="nav-item"><a href="#details-gallery-section" class="nav-link">التفاصيل</a></li>
+                <li class="nav-item"><a href="#versatility" class="nav-link">الاستخدامات</a></li>
+                <li class="nav-item"><a href="#order-form" class="nav-link">الطلب</a></li>
+            </ul>
+        </nav>
+        
+        <div class="header-actions">
+            <button class="header-order-btn">
+                <i class="fas fa-shopping-cart"></i>
+                <span>اطلب الآن</span>
+            </button>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item"><a href="#hero" class="mobile-nav-link">الرئيسية</a></li>
+            <li class="mobile-nav-item"><a href="#texture-features" class="mobile-nav-link">الميزات</a></li>
+            <li class="mobile-nav-item"><a href="#details-gallery-section" class="mobile-nav-link">التفاصيل</a></li>
+            <li class="mobile-nav-item"><a href="#versatility" class="mobile-nav-link">الاستخدامات</a></li>
+            <li class="mobile-nav-item"><a href="#order-form" class="mobile-nav-link">الطلب</a></li>
+        </ul>
+        <a href="#order-form" class="mobile-order-btn">اطلب الآن <i class="fas fa-arrow-right"></i></a>
+    </div>
+</header>
+
+<!-- PRODUCT SHOWCASE SECTION -->
+<section class="product-hero-slider" id="product-hero-slider">
+    <div class="hero-slider-wrapper">
+        <!-- الشرائح -->
+        <div class="hero-slides-container">
+            <div class="hero-slide active" data-slide-index="0">
+                <div class="slide-media">
+                    <img src="Public/images/black/81lgw9AbveL._AC_SY741_.jpg" alt="طقم رجالي صيفي فاخر - اللون الأسود" class="slide-image">
+                </div>
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <div class="slide-badge">
+                        <span class="badge-text">تصميم حصري</span>
+                    </div>
+                    <div class="slide-text-content">
+                        <h1 class="slide-title">طقم رجالي صيفي فاخر</h1>
+                        <h2 class="slide-subtitle">قماش وافل متميز للراحة والأناقة</h2>
+                        <div class="slide-features">
+                            <span class="slide-feature"><i class="fas fa-check-circle"></i> خامة ممتازة</span>
+                            <span class="slide-feature"><i class="fas fa-check-circle"></i> تهوية مثالية</span>
+                            <span class="slide-feature"><i class="fas fa-check-circle"></i> تصميم عصري</span>
+                        </div>
+                        <div class="slide-price">
+                            <span class="original-price">900 ج.م</span>
+                            <span class="current-price">699 ج.م</span>
+                            <span class="discount-badge">خصم 22%</span>
+                        </div>
+                        <button class="slide-cta-button" onclick="scrollToOrderForm()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>اطلب الآن</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-slide" data-slide-index="1">
+                <div class="slide-media">
+                    <img src="Public/images/white/71ON0PEQBYL._AC_SY741_.jpg" alt="طقم رجالي صيفي فاخر - اللون الأبيض" class="slide-image">
+                </div>
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <div class="slide-badge">
+                        <span class="badge-text">النقاء والأناقة</span>
+                    </div>
+                    <div class="slide-text-content">
+                        <h1 class="slide-title">الأبيض الناصع</h1>
+                        <h2 class="slide-subtitle">إطلالة مشرقة في أيام الصيف</h2>
+                        <div class="slide-features">
+                            <span class="slide-feature"><i class="fas fa-check-circle"></i> مناسب للشاطئ</span>
+                            <span class="slide-feature"><i class="fas fa-check-circle"></i> سهل التنظيف</span>
+                            <span class="slide-feature"><i class="fas fa-check-circle"></i> مظهر أنيق</span>
+                        </div>
+                        <div class="slide-price">
+                            <span class="original-price">900 ج.م</span>
+                            <span class="current-price">699 ج.م</span>
+                            <span class="discount-badge">خصم 22%</span>
+                        </div>
+                        <button class="slide-cta-button" onclick="scrollToOrderForm()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>اطلب الآن</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-slide" data-slide-index="2">
+                <div class="slide-media">
+                    <img src="Public/images/silver/81RFcWem8OL._AC_SY741_.jpg" alt="طقم رجالي صيفي فاخر - اللون الفضي" class="slide-image">
+                </div>
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <div class="slide-badge">
+                        <span class="badge-text">الأكثر طلباً</span>
+                    </div>
+                    <div class="slide-text-content">
+                        <h1 class="slide-title">الفضي المميز</h1>
+                        <h2 class="slide-subtitle">تألق بإطلالة عصرية استثنائية</h2>
+                        <div class="slide-features">
+                            <span class="slide-feature"><i class="fas fa-check-circle"></i> مظهر فريد</span>
+                            <span class="slide-feature"><i class="fas fa-check-circle"></i> راحة فائقة</span>
+                            <span class="slide-feature"><i class="fas fa-check-circle"></i> جودة عالية</span>
+                        </div>
+                        <div class="slide-price">
+                            <span class="original-price">900 ج.م</span>
+                            <span class="current-price">699 ج.م</span>
+                            <span class="discount-badge">خصم 22%</span>
+                        </div>
+                        <button class="slide-cta-button" onclick="scrollToOrderForm()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>اطلب الآن</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-slide" data-slide-index="3">
+                <div class="slide-media">
+                    <img src="Public/images/Pictureـonـtheـbeach.jpg" alt="طقم رجالي صيفي فاخر - على الشاطئ" class="slide-image">
+                </div>
+                <div class="slide-overlay dark-overlay"></div>
+                <div class="slide-content">
+                    <div class="slide-badge">
+                        <span class="badge-text">أسلوب حياة</span>
+                    </div>
+                    <div class="slide-text-content">
+                        <h1 class="slide-title">استمتع بصيفك</h1>
+                        <h2 class="slide-subtitle">راحة وأناقة في كل مكان تذهب إليه</h2>
+                        <div class="slide-special-offer">
+                            <div class="offer-icon"><i class="fas fa-gift"></i></div>
+                            <div class="offer-text">
+                                <span class="offer-title">عرض خاص</span>
+                                <span class="offer-description">اشترِ قطعتين واحصل على خصم إضافي 10%</span>
+                            </div>
+                        </div>
+                        <button class="slide-cta-button" onclick="scrollToOrderForm()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>اطلب الآن</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- عناصر التحكم -->
+        <div class="hero-slider-controls">
+            <!-- أزرار التنقل -->
+            <div class="slider-nav-buttons">
+                <button class="slider-nav-button prev-slide">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="slider-nav-button next-slide">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+
+            <!-- المؤشرات -->
+            <div class="slider-indicators">
+                <div class="slider-dots">
+                    <button class="slider-dot active" data-slide="0">
+                        <span class="dot-inner"></span>
+                        <span class="dot-text">أسود</span>
+                    </button>
+                    <button class="slider-dot" data-slide="1">
+                        <span class="dot-inner"></span>
+                        <span class="dot-text">أبيض</span>
+                    </button>
+                    <button class="slider-dot" data-slide="2">
+                        <span class="dot-inner"></span>
+                        <span class="dot-text">فضي</span>
+                    </button>
+                    <button class="slider-dot" data-slide="3">
+                        <span class="dot-inner"></span>
+                        <span class="dot-text">الشاطئ</span>
+                    </button>
+                </div>
+                <div class="slider-progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+
+            <!-- أزرار سريعة -->
+            <div class="quick-actions">
+                <button class="quick-action-button" onclick="openSizeChart()">
+                    <i class="fas fa-ruler"></i>
+                    <span>جدول المقاسات</span>
+                </button>
+                <button class="quick-action-button scroll-to-features">
+                    <i class="fas fa-list-ul"></i>
+                    <span>المميزات</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- شريط المعلومات -->
+        <div class="info-bar">
+            <div class="info-item">
+                <i class="fas fa-shipping-fast"></i>
+                <span>شحن مجاني لجميع المحافظات</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-hand-holding-usd"></i>
+                <span>الدفع عند الاستلام</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-undo-alt"></i>
+                <span>ضمان استرجاع خلال 14 يوم</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TEXTURE FEATURES SECTION -->
+<section class="texture-features" id="texture-features">
+    <h2 class="section-title">مميزات قماش الوافل الفاخر</h2>
+    <p class="section-description">يتميز طقم SOLY HUX بقماش الوافل عالي الجودة الذي يوفر لك الراحة والأناقة طوال اليوم</p>
+    
+    <div class="features-container">
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-wind"></i>
+            </div>
+            <h3>تهوية ممتازة</h3>
+            <p>تصميم قماش الوافل يسمح بتدفق الهواء بشكل مثالي للحفاظ على برودة الجسم في الأيام الحارة</p>
+        </div>
+        
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-tshirt"></i>
+            </div>
+            <h3>متانة فائقة</h3>
+            <p>مصنوع من مواد عالية الجودة لضمان المتانة وطول العمر حتى مع الاستخدام المتكرر والغسيل</p>
+        </div>
+        
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-feather-alt"></i>
+            </div>
+            <h3>خفيف الوزن</h3>
+            <p>وزن خفيف يناسب الأيام الحارة ويسهل حمله في السفر والخروجات اليومية</p>
+        </div>
+    </div>
+    
+    <div class="texture-gallery">
+        <div class="texture-image texture-image-zoom">
+            <img src="Public/images/black/fabric.jpg" alt="تفاصيل قماش الوافل الأسود">
+            <div class="texture-overlay">
+                <span>قماش وافل فاخر</span>
+            </div>
+        </div>
+        <div class="texture-image">
+            <img src="Public/images/Breathable_clothing_fabric_layers.webp" alt="طبقات قماش وافل متنفس">
+        </div>
+    </div>
+</section>
+
+<!-- PRODUCT DETAILS GALLERY SECTION -->
+<section class="product-details-gallery-section" id="details-gallery-section">
+    <h2 class="section-title">استكشف تفاصيل الطقم بألوانه الثلاثة</h2>
+    <p class="section-description">تفحص صور عالية الجودة لكل لون وتفاصيل الطقم من جميع الزوايا</p>
+    
+    <div class="gallery-container">
+        <!-- عارض الصور -->
+        <div class="main-gallery-viewer">
+            <div class="main-image-container">
+                <img id="current-main-image" src="Public/images/black/81lgw9AbveL._AC_SY741_.jpg" alt="طقم SOLY HUX أسود - العرض الأمامي">
+                
+                <!-- عناصر التحكم في الصورة الكبيرة -->
+                <div class="main-image-controls">
+                    <button class="gallery-nav-button prev">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="gallery-nav-button next">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                
+                <!-- عداد الصور -->
+                <div class="gallery-counter">
+                    <span id="current-gallery-image">1</span>/<span id="total-gallery-images">5</span>
+                </div>
+                
+                <!-- زر تكبير الصورة -->
+                <button class="zoom-button">
+                    <i class="fas fa-search-plus"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- الصور المصغرة -->
+        <div class="gallery-thumbnails-container">
+            <div id="gallery-thumbnails" class="gallery-thumbnails">
+                <!-- سيتم إضافة الصور المصغرة ديناميكياً -->
+            </div>
+        </div>
+        
+        <!-- اختيار اللون -->
+        <div class="gallery-color-selector">
+            <div class="gallery-color-options">
+                <button class="gallery-color-option active" data-color="black">
+                    <div class="color-badge black"></div>
+                    <span>الأسود الأنيق</span>
+                </button>
+                <button class="gallery-color-option" data-color="white">
+                    <div class="color-badge white"></div>
+                    <span>الأبيض النقي</span>
+                </button>
+                <button class="gallery-color-option" data-color="silver">
+                    <div class="color-badge silver"></div>
+                    <span>الفضي المميز</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal لعرض الصور المكبرة -->
+    <div id="image-zoom-modal" class="zoom-modal">
+        <div class="zoom-modal-content">
+            <span class="close-zoom">&times;</span>
+            <img id="zoomed-image" src="" alt="صورة مكبرة">
+        </div>
+    </div>
+</section>
+
+<!-- VERSATILITY SECTION -->
+<section class="versatility" id="versatility">
+    <h2 class="section-title">استمتع بالراحة في كل مكان</h2>
+    <p class="section-description">طقمك الصيفي المثالي SOLY HUX - استمتع بالراحة والأناقة أينما كنت، من الشاطئ إلى المنتجع وحتى التجمعات العائلية</p>
+    
+    <div class="usage-scenarios">
+        <div class="scenario">
+            <img src="Public/images/Pictureـonـtheـbeach.jpg" alt="استمتع بالطقم الأنيق على الشاطئ">
+            <h3>أجواء الشاطئ المثالية</h3>
+            <p>تصميم خفيف وعملي يجعله الخيار الأمثل لقضاء أوقات ممتعة على الشاطئ، مع قماش الوافل الفاخر سريع الجفاف</p>
+        </div>
+        
+        <div class="scenario">
+            <img src="Public/images/silver/81RFcWem8OL._AC_SY741_.jpg" alt="أناقة الطقم باللون الفضي">
+            <h3>إطلالة فاخرة بكل بساطة</h3>
+            <p>نسيج فاخر ولون مميز يضفي لمسة من الأناقة على مظهرك اليومي، مثالي للمناسبات غير الرسمية والتجمعات العائلية</p>
+        </div>
+        
+        <div class="scenario">
+            <img src="Public/images/white/Exhibition_section_white.jpg" alt="المنتجع المثالي للطقم الأبيض">
+            <h3>ملاذ الاسترخاء المثالي</h3>
+            <p>انعم بالراحة التامة في أجواء المنتجعات أو المنزل، مع تصميم عصري يجمع بين البساطة والرقي في آن واحد</p>
+        </div>
+    </div>
+</section>
+
+<!-- ORDER FORM SECTION -->
+<section class="order-form-section" id="order-form">
+    <div class="order-form-container">
+        <h2 class="section-title gold-title">اطلب طقمك الآن</h2>
+        <p class="form-description">أكمل الطلب أدناه واستمتع بالدفع عند الاستلام في جميع محافظات مصر</p>
+        
+        <form id="codOrderForm" class="cod-form">
+            <!-- SELECTED PRODUCTS SECTION -->
+            <div class="form-section">
+                <div class="form-section-header">
+                    <h3 class="form-section-title">منتجاتك المختارة</h3>
+                    <button type="button" id="addProductBtn" class="add-product-btn">
+                        <i class="fas fa-plus-circle"></i> أضف منتج آخر
+                    </button>
+                </div>
+                
+                <div id="selectedProductsContainer" class="selected-products-container">
+                    <!-- Product Item -->
+                    <div class="product-item" data-product-id="1">
+                        <div class="product-item-header">
+                            <h4 class="product-item-title">المنتج #1</h4>
+                            <button type="button" class="remove-product-btn" data-product-id="1">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="product-item-options">
+                            <div class="product-color-selection">
+                                <label class="form-label">اللون:</label>
+                                <div class="product-color-options">
+                                    <div class="product-color-option black active" data-color="black">
+                                        <div class="color-swatch black"></div>
+                                        <span>أسود</span>
+                                    </div>
+                                    <div class="product-color-option white" data-color="white">
+                                        <div class="color-swatch white"></div>
+                                        <span>أبيض</span>
+                                    </div>
+                                    <div class="product-color-option silver" data-color="silver">
+                                        <div class="color-swatch silver"></div>
+                                        <span>فضي</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="product-size-selection">
+                                <label class="form-label">المقاس:</label>
+                                <div class="size-options-flex">
+                                    <button type="button" class="size-btn" data-size="M">M</button>
+                                    <button type="button" class="size-btn active" data-size="L">L</button>
+                                    <button type="button" class="size-btn" data-size="XL">XL</button>
+                                    <button type="button" class="size-btn" data-size="2XL">2XL</button>
+                                    <button type="button" class="size-btn" data-size="3XL">3XL</button>
+                                </div>
+                            </div>
+                            
+                            <div class="product-quantity">
+                                <label class="form-label">الكمية:</label>
+                                <div class="quantity-controls">
+                                    <button type="button" class="quantity-btn decrease">-</button>
+                                    <input type="number" class="product-qty" value="1" min="1" max="10" readonly>
+                                    <button type="button" class="quantity-btn increase">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-item-summary">
+                            <div class="product-preview">
+                                <img src="Public/images/black/81lgw9AbveL._AC_SY741_.jpg" alt="طقم SOLY HUX أسود" class="product-preview-img">
+                                <div class="product-preview-details">
+                                    <span class="product-preview-color">اللون: أسود</span>
+                                    <span class="product-preview-size">المقاس: L</span>
+                                    <span class="product-preview-qty">الكمية: 1</span>
+                                </div>
+                            </div>
+                            <div class="product-price">
+                                <span class="item-price">699 ج.م</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- إضافة زر إضافة طقم آخر مع خصم -->
+            <div class="add-outfit-discount">
+                <button type="button" id="addOutfitDiscountBtn" class="add-outfit-discount-btn">
+                    <div class="add-outfit-icon">
+                        <i class="fas fa-tshirt"></i>
+                        <div class="plus-icon">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                    </div>
+                    <div class="add-outfit-text">
+                        <span class="main-text">إضافة طقم آخر</span>
+                        <span class="discount-text">واحصل على خصم 10٪</span>
+                    </div>
+                </button>
+            </div>
+            
+            <!-- إضافة زر إضافة طقم ثالث مع خصم 15% -->
+            <div class="add-outfit-discount add-third-outfit">
+                <button type="button" id="addThirdOutfitBtn" class="add-outfit-discount-btn add-third-outfit-btn">
+                    <div class="add-outfit-icon third-outfit-icon">
+                        <i class="fas fa-tshirt"></i>
+                        <div class="plus-icon">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                    </div>
+                    <div class="add-outfit-text">
+                        <span class="main-text">إضافة الطقم الثالث</span>
+                        <span class="discount-text">واحصل على خصم 15٪</span>
+                    </div>
+                </button>
+            </div>
+            
+            <!-- ORDER SUMMARY SECTION -->
+            <div class="form-section">
+                <h3 class="form-section-title">ملخص الطلب</h3>
+                
+                <div class="order-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">عدد المنتجات:</span>
+                        <span class="summary-value" id="totalItems">1</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">السعر الأصلي:</span>
+                        <span class="summary-value original-total-price">900 ج.م</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">الخصم:</span>
+                        <span class="summary-value discount-value">201 ج.م (22%)</span>
+                    </div>
+                    
+                    <div class="discount-tiers">
+                        <div class="discount-tier">
+                            <span class="tier-label">اشتري 2 واحصل على خصم 10%</span>
+                            <span class="tier-price">629 ج.م للقطعة</span>
+                        </div>
+                        <div class="discount-tier">
+                            <span class="tier-label">اشتري 3 أو أكثر واحصل على خصم 15%</span>
+                            <span class="tier-price">594 ج.م للقطعة</span>
+                        </div>
+                    </div>
+                    
+                    <div class="total-price-container">
+                        <span class="total-label">الإجمالي:</span>
+                        <span class="total-price" id="totalPrice">699 ج.م</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SHIPPING INFORMATION SECTION -->
+            <div class="form-section">
+                <h3 class="form-section-title">معلومات الشحن</h3>
+                
+                <div class="form-fields">
+                    <div class="form-field">
+                        <label for="fullName" class="field-label">الاسم بالكامل</label>
+                        <input type="text" id="fullName" name="fullName" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="mobileNumber" class="field-label">رقم الهاتف المحمول</label>
+                        <input type="tel" id="mobileNumber" name="mobileNumber" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="governorate" class="field-label">المحافظة</label>
+                        <select id="governorate" name="governorate" class="form-select" required>
+                            <option value="">اختر المحافظة</option>
+                            <option value="القاهرة">القاهرة</option>
+                            <option value="الإسكندرية">الإسكندرية</option>
+                            <option value="الجيزة">الجيزة</option>
+                            <option value="الشرقية">الشرقية</option>
+                            <option value="البحيرة">البحيرة</option>
+                            <option value="المنوفية">المنوفية</option>
+                            <option value="القليوبية">القليوبية</option>
+                            <option value="أسيوط">أسيوط</option>
+                            <option value="المنيا">المنيا</option>
+                            <option value="سوهاج">سوهاج</option>
+                            <option value="قنا">قنا</option>
+                            <option value="أسوان">أسوان</option>
+                            <option value="الأقصر">الأقصر</option>
+                            <option value="دمياط">دمياط</option>
+                            <option value="كفر الشيخ">كفر الشيخ</option>
+                            <option value="الغربية">الغربية</option>
+                            <option value="الدقهلية">الدقهلية</option>
+                            <option value="بني سويف">بني سويف</option>
+                            <option value="الفيوم">الفيوم</option>
+                            <option value="بورسعيد">بورسعيد</option>
+                            <option value="السويس">السويس</option>
+                            <option value="الإسماعيلية">الإسماعيلية</option>
+                            <option value="مطروح">مطروح</option>
+                            <option value="البحر الأحمر">البحر الأحمر</option>
+                            <option value="شمال سيناء">شمال سيناء</option>
+                            <option value="جنوب سيناء">جنوب سيناء</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="detailedAddress" class="field-label">العنوان التفصيلي</label>
+                        <textarea id="detailedAddress" name="detailedAddress" class="form-textarea" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="orderNotes" class="field-label">ملاحظات (اختياري)</label>
+                        <textarea id="orderNotes" name="orderNotes" class="form-textarea" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="order-submit-btn">
+                    <i class="fas fa-shopping-cart"></i> إتمام الطلب والدفع عند الاستلام
+                </button>
+                
+                <div class="trust-badges">
+                    <div class="badge">
+                        <i class="fas fa-truck"></i>
+                        <span>شحن سريع</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-undo"></i>
+                        <span>استرجاع مجاني</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>ضمان الجودة</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-credit-card"></i>
+                        <span>دفع آمن</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+        <!-- SIZE CHART MODAL -->
+        <div id="sizeChartModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">جدول المقاسات</h3>
+                    <span class="close-modal" onclick="closeSizeChart()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="size-chart-container">
+                        <table class="size-chart-table">
+                            <thead>
+                                <tr>
+                                    <th>المقاس</th>
+                                    <th>الطول (سم)</th>
+                                    <th>العرض (سم)</th>
+                                    <th>مناسب للوزن (كجم)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>S</td>
+                                    <td>68</td>
+                                    <td>48</td>
+                                    <td>50-60</td>
+                                </tr>
+                                <tr>
+                                    <td>M</td>
+                                    <td>70</td>
+                                    <td>52</td>
+                                    <td>60-70</td>
+                                </tr>
+                                <tr>
+                                    <td>L</td>
+                                    <td>72</td>
+                                    <td>56</td>
+                                    <td>70-80</td>
+                                </tr>
+                                <tr>
+                                    <td>XL</td>
+                                    <td>74</td>
+                                    <td>60</td>
+                                    <td>80-90</td>
+                                </tr>
+                                <tr>
+                                    <td>2XL</td>
+                                    <td>76</td>
+                                    <td>64</td>
+                                    <td>90-100</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="size-chart-note">ملاحظة: قد تختلف المقاسات قليلاً بسبب طريقة القياس اليدوي</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SUCCESS MODAL -->
+        <div id="successModal" class="modal">
+            <div class="modal-content success-modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">تم تقديم طلبك بنجاح!</h3>
+                    <span class="close-modal" onclick="closeSuccessModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <p class="success-message">
+                        سيتم التواصل معك قريباً لتأكيد طلبك ومتابعة عملية الشحن
+                    </p>
+                    <div class="order-number-container">
+                        <span class="order-number-label">رقم الطلب:</span>
+                        <span id="orderNumber" class="order-number">XXXXXX</span>
+                    </div>
+                    <button type="button" class="close-modal-btn" onclick="closeSuccessModal()">
+                        موافق
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS SECTION (ENHANCED) -->
+<section class="testimonials-enhanced" id="reviews-section">
+    <!-- Reviews Gallery Section -->
+    <div class="reviews-gallery-section">
+        <h3 class="reviews-gallery-title">معرض تقييمات عملائنا من مصر</h3>
+        <p class="reviews-gallery-description">شاهد تجارب حقيقية من عملائنا المصريين الذين اشتروا واستخدموا منتجاتنا</p>
+        
+        <div class="reviews-gallery">
+            <!-- تقييم 1 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_customer.webp" alt="تقييم من أحمد من القاهرة" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"والله الطقم جامد جدًا والخامة روعة! جربته في الساحل وكان مريح فشخ وشكله شيك أوي. يستاهل كل قرش دفعته فيه."</p>
+                        <p class="reviewer-name">أحمد من القاهرة</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 2 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_customer_2.webp" alt="تقييم من محمد من الإسكندرية" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"الصراحة مكنتش متوقع الجودة دي! القماش خفيف ومريح في الحر، والمقاس ظبطني ميه ميه. اشتريت 3 ألوان علشان عجبوني أوي!"</p>
+                        <p class="reviewer-name">محمد من الإسكندرية</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 3 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_customer_4.webp" alt="تقييم من عمرو من الجيزة" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"بجد أحسن طقم جبته السنة دي، بيتغسل كويس جدًا ومبيبوظش ولا بيبهت. لبسته كذا مرة واستحملني كتير. توصيل سريع كمان!"</p>
+                        <p class="reviewer-name">عمرو من الجيزة</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 4 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_customer_5.webp" alt="تقييم من كريم من المنصورة" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"ده أحلى طقم اشتريته من النت! القماش تحفة والخامة مش بتعرق خالص، مناسب للصيف المصري الحار. عاجبني أوي وناوي أجيب تاني."</p>
+                        <p class="reviewer-name">كريم من المنصورة</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 5 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_omar_1.webp" alt="تقييم من حسام من أسيوط" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"أنا جربت كتير قبل كده بس المرة دي حقيقي الطقم فاجئني! مناسب للبيت والخروج، وسعره معقول جدًا قياسًا بالجودة. هاخد منه كمان."</p>
+                        <p class="reviewer-name">حسام من أسيوط</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 6 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_omar_2.webp" alt="تقييم من هيثم من طنطا" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"الطقم ده يجنن بجد! اللون عاجبني وثابت بعد الغسيل، والمقاس ظبطني ميه ميه. الشحن وصل في 3 أيام بس والتعامل محترم."</p>
+                        <p class="reviewer-name">هيثم من طنطا</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 7 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_omar_3.webp" alt="تقييم من سامح من بورسعيد" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"يا جماعة الطقم ده حلو أوي، أنا كنت مستني أسبوع علشان المقاس يتوفر تاني وفعلاً استاهل الانتظار. الخامة مريحة وعملية جدًا."</p>
+                        <p class="reviewer-name">سامح من بورسعيد</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 8 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_customer.webp" alt="تقييم من مينا من الإسماعيلية" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"أنا اشتريت اللون الأسود وبصراحة بقالي أسبوعين بلبس فيه ولسه زي الفل. الستايل كاجوال وشيك وبيتلبس على أي حاجة."</p>
+                        <p class="reviewer-name">مينا من الإسماعيلية</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 9 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_customer_4.webp" alt="تقييم من فادي من شرم الشيخ" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"الطقم مثالي للجو الحار هنا في شرم! بلبسه على البحر وبعدين بخرج بيه عادي. القماش مبيعرقش والألوان شيك أوي وعملية."</p>
+                        <p class="reviewer-name">فادي من شرم الشيخ</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 10 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_customer_5.webp" alt="تقييم من باسم من الغردقة" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"الطقم خطير بجد! أنا شغال في السياحة ومحتاج حاجة مريحة وشكلها حلو، وده ضبط معايا تمام. جبت 2 علشان أبدل وكله حلو قوي."</p>
+                        <p class="reviewer-name">باسم من الغردقة</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 11 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_omar_1.webp" alt="تقييم من رامي من سوهاج" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"والله لو تعرفوا أنا دورت قد إيه على طقم حلو ومش غالي! ده فعلاً أحسن اختيار، القماش نضيف وما بيوبرش ولا بيتقطع بسرعة زي التقليد."</p>
+                        <p class="reviewer-name">رامي من سوهاج</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييم 12 -->
+            <div class="review-gallery-item">
+                <img src="Public/images/reviews/rating_review_customer_2.webp" alt="تقييم من حازم من المنيا" class="review-image">
+                <div class="review-gallery-overlay">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="review-content">
+                        <p class="review-text">"الصيف بقى أسهل مع الطقم ده، خفيف ومريح وبيتنشف بسرعة. مراتي حبته أوي وعايزة أجيب منه تاني. سعره كويس مقارنة بالماركات التانية."</p>
+                        <p class="reviewer-name">حازم من المنيا</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="see-more-reviews">
+            <a href="#" class="see-more-button">عرض المزيد من التقييمات <i class="fas fa-chevron-down"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="copyright">
+            <p>© 2023 SOLY HUX - جميع الحقوق محفوظة</p>
+        </div>
+        <div class="footer-links">
+            <a href="#">سياسة الخصوصية</a>
+            <a href="#">الشروط والأحكام</a>
+            <a href="#">سياسة الإرجاع</a>
+            <a href="#">اتصل بنا</a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html> 
