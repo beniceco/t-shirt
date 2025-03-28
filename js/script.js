@@ -1468,7 +1468,7 @@ function initOrderForm() {
         return colorNames[color] || color;
     }
     
-    // تقديم النموذج مع تأثيرات متقدمة وإرسال البيانات إلى SheetDB
+    // تقديم النموذج بشكل محلي
     document.getElementById('codOrderForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -1523,136 +1523,14 @@ function initOrderForm() {
             order_date: new Date().toISOString()
         };
         
-        // إرسال البيانات إلى Google Apps Script
-        submitFormToGoogleSheet(formData, orderNumber, submitBtn, originalBtnText);
+        // إظهار موديل تأكيد الطلب - معالجة محلية
+        processSuccessfulOrder(orderNumber, submitBtn, originalBtnText);
+        
+        // حفظ البيانات محليًا للعرض
+        saveOrderLocally(orderNumber, formData);
+        
+        console.log('بيانات الطلب:', formData);
     });
-    
-    // دالة لإرسال البيانات إلى Google Sheet عبر Make.com
-    function submitFormToGoogleSheet(formData, orderNumber, submitBtn, originalBtnText) {
-        // تجهيز البيانات بتنسيق جديد لـ Make.com (تنسيق أبسط)
-        const makeData = {
-            orderNumber: formData.order_number,
-            customerName: formData.customer_name,
-            customerMobile: formData.customer_mobile,
-            customerAddress: formData.customer_address,
-            orderNotes: formData.order_notes,
-            productDetails: formData.product_details,
-            totalItems: formData.total_items,
-            totalPrice: formData.total_price,
-            orderDate: formData.order_date
-        };
-        
-        console.log('جاري إرسال البيانات إلى Make.com:', makeData);
-        
-        // تجهيز الاستدعاء إلى Make.com لإضافة البيانات إلى جدول البيانات
-        fetch('https://hook.eu2.make.com/gewvhrklm87g7btbc6jqz7hb7fdsrigh', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(makeData)
-        })
-        .then(response => {
-            console.log('استجابة Make.com:', response);
-            if (!response.ok) {
-                throw new Error('فشل في الاتصال بـ Make.com: ' + response.status);
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log('تم إرسال البيانات بنجاح إلى Make.com:', data);
-            processSuccessfulOrder(orderNumber, submitBtn, originalBtnText);
-            
-            // إرسال بيانات مباشرة إلى Google Sheet كاحتياط
-            directSendToGoogleSheet(makeData);
-        })
-        .catch(error => {
-            console.error('حدث خطأ أثناء الإرسال إلى Make.com:', error);
-            
-            // إرسال البيانات مباشرة إلى Google Sheet
-            directSendToGoogleSheet(makeData);
-            
-            // محاولة بديلة عبر نافذة منبثقة (كحل احتياطي)
-            const params = new URLSearchParams();
-            Object.keys(makeData).forEach(key => {
-                params.append(key, makeData[key]);
-            });
-            
-            try {
-                const popupWindow = window.open(
-                    'https://hook.eu2.make.com/gewvhrklm87g7btbc6jqz7hb7fdsrigh?' + params.toString(), 
-                    'orderSubmission', 
-                    'width=1,height=1,left=-100,top=-100'
-                );
-                
-                setTimeout(() => {
-                    if (popupWindow) {
-                        popupWindow.close();
-                    }
-                }, 3000);
-            } catch (e) {
-                console.error('فشل في فتح النافذة المنبثقة:', e);
-            }
-            
-            // حفظ البيانات محلياً
-            saveOrderLocally(orderNumber, makeData);
-            
-            // إظهار رسالة نجاح للمستخدم بغض النظر عن الخطأ
-            processSuccessfulOrder(orderNumber, submitBtn, originalBtnText);
-        });
-    }
-    
-    // دالة لإرسال البيانات مباشرة إلى Google Sheet
-    function directSendToGoogleSheet(data) {
-        // إرسال البيانات مباشرة إلى نموذج Google (مرتبط بجدول بيانات)
-        try {
-            const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScPUsPqdhhCcC0cXzHxFMIYfNSKnybGrQLlGo7f88rkQ78RiA/formResponse';
-            
-            // ملاحظة: استبدل أرقام entry.XX بالأرقام الصحيحة من نموذج Google الخاص بك
-            const formData = new URLSearchParams();
-            formData.append('entry.540222458', data.orderNumber || '');
-            formData.append('entry.1316818601', data.customerName || '');
-            formData.append('entry.733922398', data.customerMobile || '');
-            formData.append('entry.1644677684', data.customerAddress || '');
-            formData.append('entry.747613571', data.orderNotes || '');
-            formData.append('entry.1438099102', data.productDetails || '');
-            formData.append('entry.1095859317', data.totalItems || '');
-            formData.append('entry.1555536045', data.totalPrice || '');
-            formData.append('entry.1333578160', data.orderDate || new Date().toISOString());
-            
-            console.log('إرسال البيانات مباشرة إلى Google Form:', googleFormUrl);
-            
-            fetch(googleFormUrl + '?' + formData.toString(), {
-                method: 'GET',
-                mode: 'no-cors'
-            }).then(() => {
-                console.log('تم إرسال البيانات بنجاح إلى Google Form');
-            }).catch(err => {
-                console.error('فشل في إرسال البيانات إلى Google Form:', err);
-            });
-        } catch (e) {
-            console.error('خطأ في دالة directSendToGoogleSheet:', e);
-        }
-    }
-    
-    // إضافة كود Webhook بديل لمزيد من الموثوقية
-    function backupSendToWebhook(formData) {
-        // يمكنك إضافة خدمة webhook بديلة هنا إذا كنت ترغب في مزيد من الموثوقية
-        // مثل make.com أو zapier أو integromat
-        console.log('نسخة احتياطية للبيانات:', formData);
-        
-        // يمكنك تفعيل هذا الكود لاستخدام webhook خارجي
-        /* 
-        fetch('https://hook.eu1.make.com/YOUR_WEBHOOK_ID_HERE', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-        }).catch(err => console.log('خطأ في إرسال البيانات الاحتياطية:', err));
-        */
-    }
     
     // دالة لمعالجة الطلب الناجح
     function processSuccessfulOrder(orderNumber, submitBtn, originalBtnText) {
@@ -1682,52 +1560,13 @@ function initOrderForm() {
     function saveOrderLocally(orderNumber, orderData) {
         try {
             // حفظ البيانات في التخزين المحلي
-            const savedOrders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
+            const savedOrders = JSON.parse(localStorage.getItem('localOrders') || '[]');
             savedOrders.push(orderData);
-            localStorage.setItem('pendingOrders', JSON.stringify(savedOrders));
-            
-            // محاولة إرسال الطلبات المعلقة عند استعادة الاتصال
-            window.addEventListener('online', function() {
-                trySubmitPendingOrders();
-            });
+            localStorage.setItem('localOrders', JSON.stringify(savedOrders));
             
             console.log('تم حفظ الطلب محليًا بنجاح برقم:', orderNumber);
         } catch (err) {
             console.error('فشل في حفظ الطلب محليًا:', err);
-        }
-    }
-    
-    // دالة لمحاولة إرسال الطلبات المعلقة
-    function trySubmitPendingOrders() {
-        try {
-            const pendingOrders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
-            if (pendingOrders.length === 0) return;
-            
-            console.log('محاولة إرسال الطلبات المعلقة. العدد:', pendingOrders.length);
-            
-            // إرسال الطلبات المعلقة واحدًا تلو الآخر
-            const promises = pendingOrders.map(order => 
-                fetch('https://sheetdb.io/api/v1/hg0a1kjbvildb', {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ data: order })
-                }).catch(err => console.error('فشل في إرسال طلب معلق:', err))
-            );
-            
-            Promise.allSettled(promises).then(results => {
-                // عد النجاحات
-                const successCount = results.filter(r => r.status === 'fulfilled').length;
-                if (successCount > 0) {
-                    console.log(`تم إرسال ${successCount} من الطلبات المعلقة بنجاح`);
-                    localStorage.removeItem('pendingOrders');
-                }
-            });
-        } catch (err) {
-            console.error('فشل في معالجة الطلبات المعلقة:', err);
         }
     }
     
