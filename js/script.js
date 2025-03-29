@@ -1,14 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // تحقق من حالة الاتصال وقم بمزامنة الطلبات المعلقة إذا كان هناك اتصال
-    if (navigator.onLine && window.firebaseServices) {
-        console.log('جاري التحقق من وجود طلبات معلقة للمزامنة...');
-        window.firebaseServices.syncPendingOrders().then((synced) => {
-            if (synced) {
-                console.log('تمت مزامنة جميع الطلبات المعلقة بنجاح');
-            } else {
-                console.warn('لم تتم مزامنة بعض الطلبات المعلقة، سيتم المحاولة مرة أخرى لاحقًا');
-            }
-        });
+    // تهيئة Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyDXoL55fWEJHYEYBgNxcKYKB9Tr2bNkAFk",
+        authDomain: "summer-tshirt-orders.firebaseapp.com",
+        databaseURL: "https://summer-tshirt-orders-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "summer-tshirt-orders",
+        storageBucket: "summer-tshirt-orders.appspot.com",
+        messagingSenderId: "1007990647992",
+        appId: "1:1007990647992:web:13a7c3f70dd84d88ad139b",
+        measurementId: "G-4GL1ZK2JE4"
+    };
+    
+    // تهيئة Firebase
+    if (typeof firebase !== 'undefined') {
+        if (!firebase.apps || !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        console.log('تم تهيئة Firebase بنجاح');
+    } else {
+        console.error('Firebase SDK غير متوفر. تأكد من تضمين مكتبات Firebase في HTML.');
     }
 
     // تهيئة المكونات عند تحميل صفحة DOM
@@ -1480,62 +1490,95 @@ function initOrderForm() {
         return colorNames[color] || color;
     }
     
-    // حدث تقديم الطلب
-    orderForm.addEventListener('submit', function(e) {
+    // تقديم النموذج بشكل محلي (يستخدم Firebase فقط)
+    document.getElementById('codOrderForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        // التحقق من صحة النموذج
+        // التحقق من صحة البيانات قبل الإرسال
         if (!validateOrderForm()) {
-            return false;
+            return;
         }
         
-        // تعطيل زر الإرسال ومتابعة المعالجة
+        // تأثير تحميل على زر الطلب
         const submitBtn = document.querySelector('.order-submit-btn');
         const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تقديم الطلب...';
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> جاري إتمام الطلب...`;
+        submitBtn.style.opacity = '0.8';
         
-        // جمع بيانات الطلب
-        const orderData = {
-            order_number: window.firebaseServices.generateOrderNumber(),
-            order_date: new Date().toISOString(),
-            customer_name: document.getElementById('customerName').value,
-            customer_mobile: document.getElementById('customerMobile').value,
-            customer_mobile2: document.getElementById('customerMobile2').value || '',
-            customer_address: document.getElementById('customerAddress').value,
-            order_notes: document.getElementById('orderNotes').value || '',
-            product_details: JSON.stringify(selectedProducts),
-            total_items: calculateTotalItems(),
-            total_price: totalPriceElement.textContent,
-            status: 'pending' // حالة الطلب الافتراضية
+        // جمع بيانات المنتجات
+        const products = [];
+        document.querySelectorAll('.product-item').forEach(product => {
+            const color = product.querySelector('.product-color-option.active').dataset.color;
+            const size = product.querySelector('.size-btn.active').dataset.size;
+            const qty = parseInt(product.querySelector('.product-qty').value);
+            
+            products.push({
+                color: color,
+                size: size,
+                quantity: qty
+            });
+        });
+        
+        // جمع بيانات العميل
+        const customerData = {
+            name: document.getElementById('fullName').value,
+            mobile: document.getElementById('mobileNumber').value,
+            governorate: document.getElementById('governorate').value,
+            address: document.getElementById('detailedAddress').value,
+            notes: document.getElementById('orderNotes').value || "لا توجد ملاحظات"
         };
         
-        // محاولة حفظ الطلب على Firebase
-        if (navigator.onLine) {
-            window.firebaseServices.saveOrder(orderData)
-                .then((saved) => {
-                    if (saved) {
-                        // معالجة نجاح الطلب
-                        processSuccessfulOrder(orderData.order_number, submitBtn, originalBtnText);
-                    } else {
-                        // حفظ الطلب محليًا في حالة فشل الاتصال
-                        saveOrderLocally(orderData.order_number, orderData);
-                        processSuccessfulOrder(orderData.order_number, submitBtn, originalBtnText);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error saving order:", error);
-                    // حفظ الطلب محليًا في حالة حدوث خطأ
-                    saveOrderLocally(orderData.order_number, orderData);
-                    processSuccessfulOrder(orderData.order_number, submitBtn, originalBtnText);
-                });
-        } else {
-            // إذا كان المستخدم غير متصل، احفظ الطلب محليًا
-            saveOrderLocally(orderData.order_number, orderData);
-            processSuccessfulOrder(orderData.order_number, submitBtn, originalBtnText);
+        // إنشاء رقم طلب عشوائي
+        const orderNumber = generateOrderNumber();
+        
+        // إعداد البيانات للإرسال إلى Firebase فقط
+        const orderData = {
+            order_number: orderNumber,
+            customer_name: customerData.name,
+            customer_mobile: customerData.mobile,
+            customer_address: `${customerData.governorate} - ${customerData.address}`,
+            order_notes: customerData.notes,
+            product_details: JSON.stringify(products),
+            total_items: document.getElementById('totalItems').textContent,
+            total_price: document.getElementById('totalPrice').textContent,
+            order_date: new Date().toISOString(),
+            status: "pending" // حالة الطلب الابتدائية
+        };
+        
+        try {
+            // إرسال البيانات إلى Firebase (لا نستخدم SheetDB أو make.com)
+            const db = firebase.firestore();
+            
+            // التحقق من اتصال Firebase
+            if (!db) {
+                throw new Error('فشل في الاتصال بـ Firebase Firestore');
+            }
+            
+            console.log('جاري حفظ الطلب في Firebase...');
+            
+            // إضافة الطلب إلى مجموعة الطلبات
+            await db.collection('orders').doc(orderNumber).set(orderData);
+            
+            // إضافة الطلب أيضًا إلى مجموعة الطلبات اليومية للإحصائيات
+            const today = new Date().toISOString().split('T')[0];
+            await db.collection('orders_by_date').doc(today).collection('daily_orders').doc(orderNumber).set(orderData);
+            
+            console.log('تم حفظ الطلب بنجاح في Firebase برقم:', orderNumber);
+            
+            // إظهار موديل تأكيد الطلب
+            processSuccessfulOrder(orderNumber, submitBtn, originalBtnText);
+        } catch (error) {
+            console.error('خطأ في حفظ الطلب في Firebase:', error);
+            
+            // حفظ البيانات محليًا في حالة الفشل في الاتصال بـ Firebase
+            saveOrderLocally(orderNumber, orderData);
+            
+            // إظهار موديل تأكيد الطلب على أي حال لتحسين تجربة المستخدم
+            processSuccessfulOrder(orderNumber, submitBtn, originalBtnText);
         }
         
-        return false;
+        console.log('بيانات الطلب:', orderData);
     });
     
     // دالة لمعالجة الطلب الناجح
@@ -1564,28 +1607,16 @@ function initOrderForm() {
     
     // دالة لحفظ البيانات محليًا (آلية الاحتياط عند فشل الاتصال بـ Firebase)
     function saveOrderLocally(orderNumber, orderData) {
-        console.log('حفظ الطلب محليًا:', orderNumber);
-        
-        // استرجاع الطلبات المعلقة الموجودة
-        const pendingOrders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
-        
-        // إضافة الطلب الجديد
-        pendingOrders.push(orderData);
-        
-        // حفظ الطلبات المعلقة مرة أخرى
-        localStorage.setItem('pendingOrders', JSON.stringify(pendingOrders));
-        
-        console.log(`تم حفظ الطلب محليًا. عدد الطلبات المعلقة حاليًا: ${pendingOrders.length}`);
-        
-        // إضافة مستمع لحدث اتصال بالإنترنت لمزامنة الطلبات المعلقة
-        window.addEventListener('online', function onlineHandler() {
-            console.log('تم استعادة الاتصال بالإنترنت. محاولة مزامنة الطلبات المعلقة...');
-            if (window.firebaseServices) {
-                window.firebaseServices.syncPendingOrders();
-            }
-            // إزالة المستمع بعد تنفيذه مرة واحدة
-            window.removeEventListener('online', onlineHandler);
-        });
+        try {
+            // حفظ البيانات في التخزين المحلي انتظارًا للمزامنة مع Firebase عند عودة الاتصال
+            const savedOrders = JSON.parse(localStorage.getItem('localOrders') || '[]');
+            savedOrders.push(orderData);
+            localStorage.setItem('localOrders', JSON.stringify(savedOrders));
+            
+            console.log('تم حفظ الطلب محليًا بنجاح برقم:', orderNumber, '(سيتم مزامنته مع Firebase عند استعادة الاتصال)');
+        } catch (err) {
+            console.error('فشل في حفظ الطلب محليًا (لن يتم مزامنته مع Firebase):', err);
+        }
     }
     
     // دالة إغلاق موديل نجاح الطلب

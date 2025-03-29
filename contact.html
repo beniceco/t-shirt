@@ -6,15 +6,6 @@
     <title>اتصل بنا - طقم صيفي SOLY HUX</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
-    
-    <!-- Firebase Services Setup -->
-    <script src="js/firebase.js"></script>
-    
     <style>
         .contact-page {
             padding: 50px 20px;
@@ -285,57 +276,6 @@
                 padding: 20px;
             }
         }
-        
-        /* أنماط رسائل النجاح والخطأ */
-        .message-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: white;
-            border-radius: 10px;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            min-width: 300px;
-            max-width: 90%;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-        
-        .message-container.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-        
-        .message-container.success {
-            border-right: 4px solid #4CAF50;
-        }
-        
-        .message-container.error {
-            border-right: 4px solid #F44336;
-        }
-        
-        .message-icon {
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-        
-        .message-container.success .message-icon {
-            color: #4CAF50;
-        }
-        
-        .message-container.error .message-icon {
-            color: #F44336;
-        }
-        
-        .message-text {
-            font-size: 16px;
-            color: #333;
-        }
     </style>
 </head>
 <body>
@@ -522,91 +462,11 @@
     </footer>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const contactForm = document.getElementById('contactForm');
-            
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // تغيير حالة زر الإرسال
-                    const submitBtn = contactForm.querySelector('.submit-btn');
-                    const originalBtnText = submitBtn.innerHTML;
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-                    
-                    // جمع بيانات النموذج
-                    const contactData = {
-                        name: document.getElementById('name').value,
-                        email: document.getElementById('email').value,
-                        subject: document.getElementById('subject').value,
-                        message: document.getElementById('message').value,
-                        date: new Date().toISOString(),
-                        source: window.location.pathname
-                    };
-                    
-                    // حفظ البيانات في Firebase
-                    if (window.firebaseServices) {
-                        window.firebaseServices.saveContactForm(contactData)
-                            .then(success => {
-                                if (success) {
-                                    // إظهار رسالة نجاح
-                                    showMessage('success', 'تم إرسال رسالتك بنجاح! سنتواصل معك قريبًا.');
-                                    contactForm.reset();
-                                } else {
-                                    showMessage('error', 'حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى لاحقًا.');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error saving contact form:', error);
-                                showMessage('error', 'حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى لاحقًا.');
-                            })
-                            .finally(() => {
-                                // إعادة الزر إلى حالته الأصلية
-                                submitBtn.disabled = false;
-                                submitBtn.innerHTML = originalBtnText;
-                            });
-                    } else {
-                        // Firebase غير متاح، إرسال رسالة افتراضية
-                        setTimeout(() => {
-                            showMessage('success', 'تم إرسال رسالتك بنجاح! سنتواصل معك قريبًا.');
-                            contactForm.reset();
-                            submitBtn.disabled = false;
-                            submitBtn.innerHTML = originalBtnText;
-                        }, 1500);
-                    }
-                });
-            }
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('شكراً لتواصلك معنا. سنقوم بالرد عليك في أقرب وقت ممكن.');
+            this.reset();
         });
-        
-        // دالة لإظهار رسائل النجاح أو الخطأ
-        function showMessage(type, messageText) {
-            // إنشاء عنصر لعرض الرسالة
-            const messageContainer = document.createElement('div');
-            messageContainer.className = `message-container ${type}`;
-            messageContainer.innerHTML = `
-                <div class="message-icon">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                </div>
-                <div class="message-text">${messageText}</div>
-            `;
-            
-            // إضافة العنصر إلى الصفحة
-            document.querySelector('.contact-form-wrapper').appendChild(messageContainer);
-            
-            // إضافة تأثير ظهور
-            setTimeout(() => {
-                messageContainer.classList.add('show');
-            }, 10);
-            
-            // إزالة الرسالة بعد فترة
-            setTimeout(() => {
-                messageContainer.classList.remove('show');
-                setTimeout(() => {
-                    messageContainer.remove();
-                }, 300);
-            }, 5000);
-        }
     </script>
 </body>
 </html> 

@@ -339,15 +339,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Botones de exportación -->
-            <div class="row mt-3">
-                <div class="col-12 text-end">
-                    <button id="exportCSVBtn" class="btn btn-success">
-                        <i class="fas fa-file-csv"></i> تنزيل كملف CSV
-                    </button>
-                </div>
-            </div>
         </div>
 
         <!-- Orders Table -->
@@ -507,9 +498,6 @@
         </div>
     </div>
 
-    <!-- Google Sheet Sync Modal -->
-    <!-- تم حذف هذا القسم بالكامل -->
-
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -560,9 +548,6 @@
 
         // Inicialización cuando se carga el DOM
         document.addEventListener('DOMContentLoaded', () => {
-            // Eliminar cualquier configuración guardada de SheetDB.io
-            localStorage.removeItem('gsheetSettings');
-            
             // Comprobar si hay una sesión activa
             checkAdminSession();
             
@@ -593,13 +578,6 @@
             
             if (updateStatusBtn) {
                 updateStatusBtn.addEventListener('click', updateOrderStatus);
-            }
-            
-            // Event listeners para exportación y sincronización
-            const exportCSVBtn = document.getElementById('exportCSVBtn');
-            
-            if (exportCSVBtn) {
-                exportCSVBtn.addEventListener('click', exportOrdersToCSV);
             }
         });
 
@@ -1228,75 +1206,6 @@
                 cancelEditBtn.addEventListener('click', closeEditOrderModal);
             }
         });
-
-        // Mantener solo la función de exportación CSV
-        function exportOrdersToCSV() {
-            // Determinar qué pedidos exportar (filtrados o todos)
-            const ordersToExport = currentFilter === 'all' ? allOrders : allOrders.filter(order => order.status === currentFilter);
-            
-            if (ordersToExport.length === 0) {
-                alert('لا توجد طلبات للتصدير');
-                return;
-            }
-            
-            // Encabezados del CSV
-            const headers = [
-                'رقم الطلب',
-                'تاريخ الطلب',
-                'اسم العميل',
-                'رقم الهاتف الرئيسي',
-                'رقم الهاتف البديل',
-                'العنوان',
-                'عدد المنتجات',
-                'المبلغ الإجمالي',
-                'الحالة',
-                'المنتجات',
-                'ملاحظات'
-            ];
-            
-            // Convertir pedidos a filas CSV
-            const rows = ordersToExport.map(order => {
-                // Formatear productos
-                let productsInfo = '';
-                try {
-                    const products = JSON.parse(order.product_details || '[]');
-                    productsInfo = products.map(p => `${getColorName(p.color)} - ${p.size} (${p.quantity})`).join(' | ');
-                } catch (e) {
-                    productsInfo = 'خطأ في البيانات';
-                }
-                
-                return [
-                    order.order_number || '',
-                    formatDate(order.order_date) || '',
-                    order.customer_name || '',
-                    order.customer_mobile || '',
-                    order.customer_mobile2 || '',
-                    order.customer_address || '',
-                    order.total_items || '0',
-                    order.total_price || '0',
-                    getStatusText(order.status || 'pending'),
-                    productsInfo,
-                    order.order_notes || ''
-                ];
-            });
-            
-            // Combinamos encabezados y filas
-            const csvContent = [
-                headers.join(','),
-                ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-            ].join('\n');
-            
-            // Crear blob y descargar
-            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            
-            const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', `SOLY_HUX_Orders_${new Date().toISOString().slice(0, 10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
     </script>
 </body>
 </html> 
