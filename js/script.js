@@ -1,4 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // تهيئة Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyDXoL55fWEJHYEYBgNxcKYKB9Tr2bNkAFk",
+        authDomain: "summer-tshirt-orders.firebaseapp.com",
+        databaseURL: "https://summer-tshirt-orders-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "summer-tshirt-orders",
+        storageBucket: "summer-tshirt-orders.appspot.com",
+        messagingSenderId: "1007990647992",
+        appId: "1:1007990647992:web:13a7c3f70dd84d88ad139b",
+        measurementId: "G-4GL1ZK2JE4"
+    };
+    
+    // تهيئة Firebase
+    if (typeof firebase !== 'undefined') {
+        if (!firebase.apps || !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        console.log('تم تهيئة Firebase بنجاح');
+    } else {
+        console.error('Firebase SDK غير متوفر. تأكد من تضمين مكتبات Firebase في HTML.');
+    }
+
     // تهيئة المكونات عند تحميل صفحة DOM
     console.log('تم تحميل DOM، جاري تهيئة المكونات...');
     
@@ -1468,8 +1490,8 @@ function initOrderForm() {
         return colorNames[color] || color;
     }
     
-    // تقديم النموذج بشكل محلي
-    document.getElementById('codOrderForm').addEventListener('submit', function(e) {
+    // تقديم النموذج بشكل محلي (يستخدم Firebase فقط)
+    document.getElementById('codOrderForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
         // التحقق من صحة البيانات قبل الإرسال
@@ -1510,8 +1532,8 @@ function initOrderForm() {
         // إنشاء رقم طلب عشوائي
         const orderNumber = generateOrderNumber();
         
-        // إعداد البيانات للإرسال
-        const formData = {
+        // إعداد البيانات للإرسال إلى Firebase فقط
+        const orderData = {
             order_number: orderNumber,
             customer_name: customerData.name,
             customer_mobile: customerData.mobile,
@@ -1520,16 +1542,43 @@ function initOrderForm() {
             product_details: JSON.stringify(products),
             total_items: document.getElementById('totalItems').textContent,
             total_price: document.getElementById('totalPrice').textContent,
-            order_date: new Date().toISOString()
+            order_date: new Date().toISOString(),
+            status: "pending" // حالة الطلب الابتدائية
         };
         
-        // إظهار موديل تأكيد الطلب - معالجة محلية
-        processSuccessfulOrder(orderNumber, submitBtn, originalBtnText);
+        try {
+            // إرسال البيانات إلى Firebase (لا نستخدم SheetDB أو make.com)
+            const db = firebase.firestore();
+            
+            // التحقق من اتصال Firebase
+            if (!db) {
+                throw new Error('فشل في الاتصال بـ Firebase Firestore');
+            }
+            
+            console.log('جاري حفظ الطلب في Firebase...');
+            
+            // إضافة الطلب إلى مجموعة الطلبات
+            await db.collection('orders').doc(orderNumber).set(orderData);
+            
+            // إضافة الطلب أيضًا إلى مجموعة الطلبات اليومية للإحصائيات
+            const today = new Date().toISOString().split('T')[0];
+            await db.collection('orders_by_date').doc(today).collection('daily_orders').doc(orderNumber).set(orderData);
+            
+            console.log('تم حفظ الطلب بنجاح في Firebase برقم:', orderNumber);
+            
+            // إظهار موديل تأكيد الطلب
+            processSuccessfulOrder(orderNumber, submitBtn, originalBtnText);
+        } catch (error) {
+            console.error('خطأ في حفظ الطلب في Firebase:', error);
+            
+            // حفظ البيانات محليًا في حالة الفشل في الاتصال بـ Firebase
+            saveOrderLocally(orderNumber, orderData);
+            
+            // إظهار موديل تأكيد الطلب على أي حال لتحسين تجربة المستخدم
+            processSuccessfulOrder(orderNumber, submitBtn, originalBtnText);
+        }
         
-        // حفظ البيانات محليًا للعرض
-        saveOrderLocally(orderNumber, formData);
-        
-        console.log('بيانات الطلب:', formData);
+        console.log('بيانات الطلب:', orderData);
     });
     
     // دالة لمعالجة الطلب الناجح
@@ -1556,17 +1605,17 @@ function initOrderForm() {
         });
     }
     
-    // دالة لحفظ البيانات محليًا
+    // دالة لحفظ البيانات محليًا (آلية الاحتياط عند فشل الاتصال بـ Firebase)
     function saveOrderLocally(orderNumber, orderData) {
         try {
-            // حفظ البيانات في التخزين المحلي
+            // حفظ البيانات في التخزين المحلي انتظارًا للمزامنة مع Firebase عند عودة الاتصال
             const savedOrders = JSON.parse(localStorage.getItem('localOrders') || '[]');
             savedOrders.push(orderData);
             localStorage.setItem('localOrders', JSON.stringify(savedOrders));
             
-            console.log('تم حفظ الطلب محليًا بنجاح برقم:', orderNumber);
+            console.log('تم حفظ الطلب محليًا بنجاح برقم:', orderNumber, '(سيتم مزامنته مع Firebase عند استعادة الاتصال)');
         } catch (err) {
-            console.error('فشل في حفظ الطلب محليًا:', err);
+            console.error('فشل في حفظ الطلب محليًا (لن يتم مزامنته مع Firebase):', err);
         }
     }
     
@@ -1671,14 +1720,68 @@ function initOrderForm() {
         
         // التحقق من العنوان التفصيلي
         const addressField = document.getElementById('detailedAddress');
-        if (!addressField.value || addressField.value.trim().length < 5) {
-            alert('يرجى إدخال العنوان التفصيلي بشكل صحيح');
+        if (!addressField.value || addressField.value.trim().length < 10) {
+            alert('يرجى إدخال عنوان تفصيلي (لا يقل عن 10 أحرف)');
             addressField.focus();
             return false;
         }
         
         return true;
     }
+    
+    // دالة لمحاولة إرسال الطلبات المعلقة عند استعادة الاتصال (تستخدم Firebase فقط)
+    function syncPendingOrders() {
+        try {
+            // استرجاع الطلبات المخزنة محليًا (إذا كانت موجودة)
+            const localOrders = JSON.parse(localStorage.getItem('localOrders') || '[]');
+            if (localOrders.length === 0) return;
+            
+            console.log('محاولة مزامنة الطلبات المعلقة مع Firebase. العدد:', localOrders.length);
+            
+            // التحقق من توفر Firebase
+            if (typeof firebase === 'undefined' || !firebase.firestore) {
+                console.error('Firebase Firestore غير متوفر. لا يمكن مزامنة الطلبات.');
+                return;
+            }
+            
+            const db = firebase.firestore();
+            
+            // إرسال كل طلب معلّق إلى Firebase
+            const promises = localOrders.map(order => {
+                return db.collection('orders').doc(order.order_number)
+                    .set(order)
+                    .then(() => {
+                        // إضافة الطلب أيضًا إلى المجموعة اليومية في Firebase
+                        const orderDate = new Date(order.order_date);
+                        const dateString = orderDate.toISOString().split('T')[0];
+                        return db.collection('orders_by_date').doc(dateString).collection('daily_orders').doc(order.order_number).set(order);
+                    });
+            });
+            
+            Promise.allSettled(promises).then(results => {
+                // حساب عدد الطلبات المتزامنة بنجاح مع Firebase
+                const successCount = results.filter(r => r.status === 'fulfilled').length;
+                if (successCount > 0) {
+                    console.log(`تمت مزامنة ${successCount} من الطلبات المعلقة بنجاح مع Firebase`);
+                    localStorage.removeItem('localOrders');
+                }
+            });
+        } catch (err) {
+            console.error('فشل في مزامنة الطلبات المعلقة مع Firebase:', err);
+        }
+    }
+    
+    // إضافة مستمع لاستعادة الاتصال
+    window.addEventListener('online', function() {
+        syncPendingOrders();
+    });
+    
+    // محاولة المزامنة عند تحميل الصفحة
+    window.addEventListener('load', function() {
+        if (navigator.onLine) {
+            syncPendingOrders();
+        }
+    });
 }
 
 // تهيئة اختيار اللون للموبايل
