@@ -343,9 +343,6 @@
             <!-- Botones de exportación -->
             <div class="row mt-3">
                 <div class="col-12 text-end">
-                    <button id="syncGoogleSheetsBtn" class="btn btn-primary me-2">
-                        <i class="fas fa-sync-alt"></i> مزامنة مع جوجل شيت
-                    </button>
                     <button id="exportCSVBtn" class="btn btn-success">
                         <i class="fas fa-file-csv"></i> تنزيل كملف CSV
                     </button>
@@ -511,35 +508,7 @@
     </div>
 
     <!-- Google Sheet Sync Modal -->
-    <div id="gsheetModalBackdrop" class="order-modal-backdrop"></div>
-    <div id="gsheetModal" class="order-modal">
-        <div class="order-modal-header">
-            <h3>إعدادات مزامنة جوجل شيت</h3>
-            <button id="gsheetModalClose" class="order-modal-close">&times;</button>
-        </div>
-        <div class="order-modal-body">
-            <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i>
-                سيتم مزامنة البيانات مع جدول البيانات التالي:
-                <a href="https://docs.google.com/spreadsheets/d/1dVURZHsULF7LNpLa574QbaADwYqVzCIZaU36sMlvcMo/edit" target="_blank">
-                    SOLY HUX Orders
-                </a>
-            </div>
-            
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="autoSyncCheckbox">
-                <label class="form-check-label" for="autoSyncCheckbox">
-                    مزامنة تلقائية عند تحديث حالة الطلبات
-                </label>
-            </div>
-            
-            <div class="mt-4 text-center">
-                <button id="startSyncBtn" class="btn btn-primary">
-                    <i class="fas fa-sync-alt"></i> بدء المزامنة
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- تم حذف هذا القسم بالكامل -->
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -591,8 +560,8 @@
 
         // Inicialización cuando se carga el DOM
         document.addEventListener('DOMContentLoaded', () => {
-            // Comprobar si hay configuración de Google Sheets guardada
-            const gsheetSettings = localStorage.getItem('gsheetSettings');
+            // Eliminar cualquier configuración guardada de SheetDB.io
+            localStorage.removeItem('gsheetSettings');
             
             // Comprobar si hay una sesión activa
             checkAdminSession();
@@ -628,51 +597,10 @@
             
             // Event listeners para exportación y sincronización
             const exportCSVBtn = document.getElementById('exportCSVBtn');
-            const syncGoogleSheetsBtn = document.getElementById('syncGoogleSheetsBtn');
-            const gsheetModalClose = document.getElementById('gsheetModalClose');
-            const gsheetModalBackdrop = document.getElementById('gsheetModalBackdrop');
-            const startSyncBtn = document.getElementById('startSyncBtn');
-            const autoSyncCheckbox = document.getElementById('autoSyncCheckbox');
             
             if (exportCSVBtn) {
                 exportCSVBtn.addEventListener('click', exportOrdersToCSV);
             }
-            
-            if (syncGoogleSheetsBtn) {
-                syncGoogleSheetsBtn.addEventListener('click', showGSheetSyncModal);
-            }
-            
-            if (gsheetModalClose) {
-                gsheetModalClose.addEventListener('click', closeGSheetModal);
-            }
-            
-            if (gsheetModalBackdrop) {
-                gsheetModalBackdrop.addEventListener('click', closeGSheetModal);
-            }
-            
-            if (startSyncBtn) {
-                startSyncBtn.addEventListener('click', syncWithGoogleSheets);
-            }
-            
-            if (autoSyncCheckbox && gsheetSettings) {
-                try {
-                    const settings = JSON.parse(gsheetSettings);
-                    autoSyncCheckbox.checked = settings.autoSync || false;
-                } catch (e) {
-                    console.error("Error parsing Google Sheets settings", e);
-                }
-            }
-            
-            if (autoSyncCheckbox) {
-                autoSyncCheckbox.addEventListener('change', function() {
-                    localStorage.setItem('gsheetSettings', JSON.stringify({
-                        autoSync: this.checked
-                    }));
-                });
-            }
-            
-            // Comprobar configuración de auto-sync
-            checkAndAutoSyncGoogleSheets();
         });
 
         // Verificar si hay una sesión de administrador activa
@@ -964,9 +892,6 @@
                 closeOrderModal();
                 filterOrders(currentFilter);
                 updateStatistics();
-                
-                // Comprobar si debemos realizar autoSync después de actualizar
-                autoSyncWithGoogleSheets();
             })
             .catch(error => {
                 console.error("Error updating order status:", error);
@@ -1245,9 +1170,6 @@
                 closeEditOrderModal();
                 filterOrders(currentFilter);
                 updateStatistics();
-                
-                // Comprobar si debemos realizar autoSync después de actualizar
-                autoSyncWithGoogleSheets();
             })
             .catch(error => {
                 console.error("Error updating order:", error);
@@ -1374,146 +1296,6 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }
-
-        // Mostrar modal de sincronización con Google Sheets
-        function showGSheetSyncModal() {
-            document.getElementById('gsheetModalBackdrop').style.display = 'block';
-            document.getElementById('gsheetModal').style.display = 'block';
-        }
-        
-        // Cerrar modal de Google Sheets
-        function closeGSheetModal() {
-            document.getElementById('gsheetModalBackdrop').style.display = 'none';
-            document.getElementById('gsheetModal').style.display = 'none';
-        }
-        
-        // Sincronizar pedidos con Google Sheets
-        function syncWithGoogleSheets() {
-            const startSyncBtn = document.getElementById('startSyncBtn');
-            
-            if (allOrders.length === 0) {
-                alert('لا توجد طلبات للمزامنة');
-                return;
-            }
-            
-            // Cambiar el estado del botón para mostrar progreso
-            startSyncBtn.disabled = true;
-            startSyncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المزامنة...';
-            
-            // Preparar los datos para la sincronización
-            const ordersForSync = allOrders.map(order => {
-                // Formatear productos
-                let productsInfo = '';
-                try {
-                    const products = JSON.parse(order.product_details || '[]');
-                    productsInfo = products.map(p => `${getColorName(p.color)} - ${p.size} (${p.quantity})`).join(' | ');
-                } catch (e) {
-                    productsInfo = 'خطأ في البيانات';
-                }
-                
-                return {
-                    order_number: order.order_number || '',
-                    order_date: formatDate(order.order_date) || '',
-                    customer_name: order.customer_name || '',
-                    phone: order.customer_mobile || '',
-                    phone2: order.customer_mobile2 || '',
-                    address: order.customer_address || '',
-                    total_items: order.total_items || '0',
-                    total_price: order.total_price || '0',
-                    status: getStatusText(order.status || 'pending'),
-                    products: productsInfo,
-                    notes: order.order_notes || ''
-                };
-            });
-            
-            // Usar SheetDB API para sincronizar con Google Sheets
-            fetch('https://sheetdb.io/api/v1/hg0a1kjbvildb', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    data: ordersForSync
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Registrar la configuración y mostrar mensaje de éxito
-                const autoSync = document.getElementById('autoSyncCheckbox').checked;
-                localStorage.setItem('gsheetSettings', JSON.stringify({
-                    autoSync: autoSync,
-                    lastSync: new Date().toISOString()
-                }));
-                
-                alert(`تمت المزامنة بنجاح! تم مزامنة ${data.created} طلب.`);
-                closeGSheetModal();
-            })
-            .catch(error => {
-                console.error("Error syncing with Google Sheets:", error);
-                alert('حدث خطأ أثناء المزامنة مع جوجل شيت');
-            })
-            .finally(() => {
-                startSyncBtn.disabled = false;
-                startSyncBtn.innerHTML = '<i class="fas fa-sync-alt"></i> بدء المزامنة';
-            });
-        }
-        
-        // Comprobar configuración de auto-sync y última sincronización
-        function checkAndAutoSyncGoogleSheets() {
-            const gsheetSettings = localStorage.getItem('gsheetSettings');
-            
-            if (gsheetSettings) {
-                try {
-                    const settings = JSON.parse(gsheetSettings);
-                    if (settings.autoSync) {
-                        // Si auto-sync está activado y han pasado más de 24h desde la última sincronización
-                        const lastSync = new Date(settings.lastSync || 0);
-                        const now = new Date();
-                        const hoursSinceLastSync = (now - lastSync) / (1000 * 60 * 60);
-                        
-                        if (hoursSinceLastSync > 24) {
-                            // Actualizar la última sincronización para evitar múltiples sincronizaciones
-                            localStorage.setItem('gsheetSettings', JSON.stringify({
-                                ...settings,
-                                lastSync: now.toISOString()
-                            }));
-                            
-                            // Programar una sincronización automática después de cargar los datos
-                            setTimeout(() => {
-                                if (allOrders.length > 0) {
-                                    syncWithGoogleSheets();
-                                }
-                            }, 5000);
-                        }
-                    }
-                } catch (e) {
-                    console.error("Error checking auto-sync settings", e);
-                }
-            }
-        }
-        
-        // Auto-sincronizar después de actualizar pedidos si está activado
-        function autoSyncWithGoogleSheets() {
-            const gsheetSettings = localStorage.getItem('gsheetSettings');
-            
-            if (gsheetSettings) {
-                try {
-                    const settings = JSON.parse(gsheetSettings);
-                    if (settings.autoSync) {
-                        // Actualizar la configuración con la última sincronización
-                        localStorage.setItem('gsheetSettings', JSON.stringify({
-                            ...settings,
-                            lastSync: new Date().toISOString()
-                        }));
-                        
-                        // Ejecutar la sincronización
-                        syncWithGoogleSheets();
-                    }
-                } catch (e) {
-                    console.error("Error auto-syncing with Google Sheets", e);
-                }
-            }
         }
     </script>
 </body>
